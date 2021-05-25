@@ -1,24 +1,19 @@
-import discord
-
+from discord.ext import commands
 import os
 from dotenv import load_dotenv, find_dotenv
 
-client = discord.Client()
+load_dotenv(find_dotenv()) #find the .env file
+
+bot = commands.Bot(command_prefix='$')
 
 
-load_dotenv(find_dotenv())
-
-@client.event
+@bot.event
 async def on_ready():
-    print("we have logged in as {0.user}".format(client))
+    print("we have logged in as {0.user}".format(bot))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith("$hello"):
-        await message.channel.send("Hello")
+@bot.command(name="register")
+async def register(message):
+    await message.channel.send("registered")
 
 
-client.run(os.environ.get("TOKEN"))
+bot.run(os.environ.get("DISCORD_TOKEN"))
