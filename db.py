@@ -10,8 +10,13 @@ con = sqlite3.connect("UWAESdatabase.db") #connects to database
 
 cursor = con.cursor() #cursor is used to navigate database
 
-def insertUser(DiscordID, StudentNumber):
-    cursor.execute("INSERT INTO Users VALUES(" + str(DiscordID) + ", " + str(StudentNumber) + ")")
+#cursor.execute("UPDATE Users SET RiotID = 'SantyMax' WHERE DiscordID = 221633274013810688")
+#con.commit()
+
+def insertUser(DiscordID):
+    cursor.execute("INSERT INTO Users (DiscordID) VALUES (" + DiscordID + " )")
     con.commit()
 
-insertUser(3, 22709039)
+def editUser(DiscordID, Collumn, Input):
+    cursor.execute("UPDATE Users SET " + Collumn + " = '" + Input + "' WHERE DiscordID = " + DiscordID)
+    con.commit()
