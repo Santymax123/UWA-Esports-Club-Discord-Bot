@@ -1,0 +1,44 @@
+registering a second time crashes bot
+riot games api needs regenerating
+im about to try and make the matchmaking algorithm for my bot. basically its going to be done by converting ranks into a number ie iron 4 = 1 and bronze 4 = 5.
+ill have a pool of approx 30 ppl all reacting to the same bot. i want to make balanced teams 
+
+
+
+take the highest player and the second highest player and place each in team one and team 2
+brute force find a combination of all other players that make the closest number
+
+
+pass over a dictionary of                discord id : league id
+pass back a list of dictionaries of      league id  : rank
+
+
+Make sure that i dont crash the bot on challenger players since they have no tier
+
+challenger = 2500
+grandmaster = 2450
+master = 2400
+D1 = 2350
+D2
+d3
+d4 = 2200
+p1 = 2150
+p2
+p3
+p4 = 2000
+g1 = 1950
+g2
+g3
+g4 = 1800
+s1 = 1750
+s2
+s3
+s4 = 1600
+b1 = 1550
+b2
+b3
+b4 = 1400
+i1 = 1350
+i2
+i3
+i4 = 1200

@@ -17,8 +17,35 @@ region = "OC1"
 
 def UsernameToID(Summonername):
     try:
-        summoner = watcher.summoner.by_name(region, Summonername)
+      summoner = watcher.summoner.by_name(region, Summonername)
     except HTTPError:
       return("Summoner name not valid")  
 
-    return(summoner["puuid"])
+    return(summoner["id"])
+
+def GetRank(id):
+  try:
+    stats = watcher.league.by_summoner(region, id)
+  except HTTPError:
+    return("error fetching ranked stats")
+  if stats != []:
+    tier = stats[0]['tier']
+    rank = ""
+
+    if stats[0]['rank'] == "IV":
+      rank = "4"
+    if stats[0]['rank'] == "III":
+      rank = "3"
+    if stats[0]['rank'] == "II":
+      rank = "2"
+    if stats[0]['rank'] == "I":
+      rank = "1"
+
+    FullRank = tier + " " + rank
+    return(FullRank)
+  else:
+    return("SILVER 4")
+  
+
+
+#print(GetRank(UsernameToID("SantyMax")))
