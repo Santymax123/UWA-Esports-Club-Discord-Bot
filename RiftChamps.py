@@ -1,4 +1,7 @@
+from random import randint
 
+#Probably use a class per match with methods for getTeam() (returns a list containing each player on that team), and replace() (replaces a parameter player in a team with the second parameter player).
+#__init__() should autobalance the teams when created, not sure if I should keep the ranks on the object though for each player though
 
 def GetRankValue(Player):
     return Player.get("RankValue")
@@ -61,17 +64,73 @@ def MakeGames(Players):
 
 
 sampletable = [
-    {"DiscordName" : 1, "RiotName" : "SantyMax", "RankValue" : 2000},
-    {"DiscordName" : 2, "RiotName" : "SantyMax2", "RankValue" : 2250},
-    {"DiscordName" : 3, "RiotName" : "SantyMax3", "RankValue" : 2000},
-    {"DiscordName" : 4, "RiotName" : "SantyMax4", "RankValue" : 1600},
-    {"DiscordName" : 5, "RiotName" : "SantyMax", "RankValue" : 1400},
-    {"DiscordName" : 6, "RiotName" : "SantyMax", "RankValue" : 1200},
-    {"DiscordName" : 7, "RiotName" : "SantyMax", "RankValue" : 2500},
-    {"DiscordName" : 8, "RiotName" : "SantyMax", "RankValue" : 1600},
-    {"DiscordName" : 9, "RiotName" : "SantyMax", "RankValue" : 2250},
-    {"DiscordName" : 10, "RiotName" : "SantyMax", "RankValue" : 2450}
+    [1, "SantyMax", 2000],
+    [2, "SantyMax2", 2250],
+    [3, "SantyMax3", 2000],
+    [4, "SantyMax4", 1600],
+    [5, "SantyMax5", 1400],
+    [6, "SantyMax6", 1200],
+    [7, "SantyMax7", 2500],
+    [8, "SantyMax8", 1600],
+    [9, "SantyMax9", 2250],
+    [10, "SantyMax10", 2450]
 ]
 
-MakeGames(sampletable)
+#print(MakeGames(sampletable))
 
+class Matches:
+    def __init__(self):
+        self.matches = {}
+    
+    def createMatches(self, allPlayers):
+        j = 0
+        for i in range((len(allPlayers) // 10)):
+            self.matches.update({"Match{0}".format(i+1): createMatch(allPlayers[0:10])})
+            for i in range(10):
+                allPlayers.pop(0)
+            j = i + 1
+        if len(allPlayers) >= 5:
+            self.matches.update({"Match{0}".format(j+1): [allPlayers[0:5]]})
+            for x in range(5):
+                allPlayers.pop(0)
+        return allPlayers
+            
+
+def createMatch(players): #Need to find a better way to matchmake so insanely high ranked players don't end up stomping every time
+    match = [[],[]]
+    players.sort(reverse=True, key=GetRank)
+    for player in players:
+        oneOrTwo = randint(1, 2)
+        if len(match[0]) == (len(players) // 2):
+            match[1].append(player)
+        elif len(match[1]) == (len(players) // 2):
+            match[0].append(player)
+        else:
+            if oneOrTwo == 1:
+                if getTeamRank(match[0]) > getTeamRank(match[1]):
+                    match[1].append(player)
+                else:
+                    match[0].append(player)
+            else:
+                if getTeamRank(match[0]) < getTeamRank(match[1]):
+                    match[0].append(player)
+                else:
+                    match[1].append(player)
+    return match
+        
+
+def replace(match, replacee, replacer):
+    for i in range(match[0]):
+        if match[0][i][1] == replacee:
+            match[0][i] = replacer
+    for i in range(match[1]):
+        if match[1][i][1] == replacee:
+            match[1][i] = replacer
+    return match
+
+
+def getTeamRank(team):
+    return sum([player[2] for player in team])
+
+def GetRank(player):
+    return player[2]
